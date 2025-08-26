@@ -1,0 +1,45 @@
+pipeline {
+    agent { label 'node' } // Jenkins agent/slave label
+    
+    environment {
+        IMAGE_NAME = "simple_node_app"
+        IMAGE_TAG = "latest"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Siddik2202/simple_node_app.git'
+            }
+        }
+
+        stage('Build App Image') {
+            steps {
+                script {
+                    // Build the Docker image from local Dockerfile
+                    sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
+                }
+            }
+        }
+
+        stage('Deploy with Docker Compose') {
+            steps {
+                script {
+                    // Stop old containers if running
+                    sh 'docker-compose down || true'
+                    // Start containers in detached mode
+                    sh 'docker-compose up -d --build'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Deployment successful!'
+        }
+        failure {
+            echo '❌ Deployment failed!'
+        }
+    }
+}
