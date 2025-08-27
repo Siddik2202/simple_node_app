@@ -29,7 +29,7 @@ ix) For that you should enable 3000 (from app) and 8080 (alternative port of htt
 
 1. 1st of all set up agent node from master beacuse jenkins work as a master-slave architechture.
 
-2. Then I have a besic jenkins file set this in grovvy syntax enable github pooling and you can also attach github webhooks.
+2. Then I have a besic_jenkins or jenkins (both are correct) file set this in grovvy syntax enable github pooling and you can also attach github webhooks.
 
 3. And This will work smoothly also enable port.
 
