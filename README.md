@@ -6,9 +6,12 @@ when You submit the form then the data will store in mysql db.
 
 ### Here are the step to run on docker with EC2 instance server
 
-i) Host a instance then clone you repository from your github using sudo git clone < your project url >
+i) Host a instance then clone you repository from your github using 
 
-ii) Create Dockerfile for your project 
+```bash
+sudo git clone https://github.com/Siddik2202/simple_node_app.git
+```
+ii) Create Dockerfile for your project. You get this from root folder. 
 
 iii) update your nodeServer/index.js to Docker, MySQL runs in another container, accessible via a container name like db. especially important when running in Docker
 
