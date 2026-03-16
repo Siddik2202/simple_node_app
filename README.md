@@ -6,16 +6,77 @@ when You submit the form then the data will store in mysql db.
 
 ### Here are the step to run on docker with EC2 instance server
 
-i) Host a instance then clone you repository from your github using 
+1) Host a instance then clone you repository from your github using 
 
 ```bash
 sudo git clone https://github.com/Siddik2202/simple_node_app.git
 ```
 
-ii) Create Dockerfile for your project. You get this from root folder. And run 
+2) Create Dockerfile for your project. You get this from root folder. And run 
 ```bash
 docker build -t simple-node-app .
 ```
+
+3) After we need to run this image but make sure you connect with db there have many method to do that
+   
+   3.1) Create a network 1st to connect with db
+```bash
+docker network create simple-app-network
+```
+   3.2) Using init.sql (Your Current Method) If you have 
+```bash
+   docker run -d --name db --network simple-app-network -e MYSQL_ROOT_PASSWORD=root -v $(pwd)/init.sql:/docker-entrypoint-initdb.d/init.sql -p 3306:3306 mysql:8
+```
+   3.3) Create Database Manually Inside Container. First start MySQL container:
+```bash
+docker run -d --name db -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 mysql:8
+```
+   Then enter under container ```bash  docker exec -it db mysql -u root -p  ```
+   And then you need to manually run SQL
+   ```bash
+CREATE DATABASE sampledb;
+
+USE sampledb;
+
+CREATE TABLE nodeuser (
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(100),
+mobile VARCHAR(15),
+email VARCHAR(100)
+);
+```
+
+   3.4) Execute SQL File After Container Starts: Instead of mounting init.sql, you can run it later.
+```bash
+docker exec -i db mysql -u root -p sampledb < init.sql
+```
+
+   3.5 Application Creates Tables (Auto Migration) Your Node.js backend can create tables automatically.
+   When Node app starts -> Check if table exists -> Create if not
+   
+   3.6 Using Docker Compose (Most Used in DevOps. We also do this one the next step.
+
+   For now I use method 1, After that your MySQL container start Attach to simple-app-network and automatically Run init.sql also Create database + table
+
+4. Then run your node container with network:
+   you cannot create another container with the same name, even if the existing container is Exited. If then remove ```bash
+   docker rm container-name
+```
+```bash
+docker run -d --name simple-node --network simple-app-network -p 3000:3000 simple-node-app
+```
+    
+5. 
+
+
+
+
+
+
+
+
+
+
 
 iii) update your nodeServer/index.js to Docker, MySQL runs in another container, accessible via a container name like db. especially important when running in Docker
 
