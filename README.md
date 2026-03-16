@@ -90,6 +90,11 @@ docker volume create mysql-data
 docker rm -f db
 docker run -d --name db --network simple-app-network -e MYSQL_ROOT_PASSWORD=root -v mysql-data:/var/lib/mysql -v $(pwd)/init.sql:/docker-entrypoint-initdb.d/init.sql mysql:8
 
+# 2nd way to connect then 
+# cd ~/simple_node_app
+# mkdir mysql-data
+# -v ~/simple_node_app/mysql-data:/var/lib/mysql \
+
 # Now you get error because when you connect with new database you application attach with old
 docker restart simple-node
 # Now works fine
