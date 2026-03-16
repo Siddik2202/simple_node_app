@@ -4,7 +4,7 @@ There Have a form and backend connection with mysql.
 
 when You submit the form then the data will store in mysql db.
 
-### Here are the step to run on docker with EC2 instance server
+### Here are the step to run on docker with EC2 instance server step by step withour docker compose
 
 1) Host a instance then clone you repository from your github using 
 
@@ -94,6 +94,19 @@ docker run -d --name db --network simple-app-network -e MYSQL_ROOT_PASSWORD=root
 docker restart simple-node
 # Now works fine
 ```
+8. Now you can check
+```bash
+docker volume inspect mysql-data
+# here you will see a Mountpoint
+sudo -i
+cd /var/lib/docker/volumes/mysql-data/_data
+# here you can see ibdata1, etc... 
+```
+Thank you
+
+
+### Here are the step to run on docker with EC2 instance with docker compose
+
 
 
 
