@@ -32,7 +32,7 @@ docker network create simple-app-network
 ```bash
 docker run -d --name db -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 mysql:8
 ```
-   Then enter under container ```bash  docker exec -it db mysql -u root -p  ```
+   Then enter under container ```  docker exec -it db mysql -u root -p  ```
    And then you need to manually run SQL
 ```bash
 CREATE DATABASE sampledb;
