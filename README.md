@@ -56,7 +56,7 @@ docker exec -i db mysql -u root -p sampledb < init.sql
    
    3.6 Using Docker Compose (Most Used in DevOps. We also do this one the next step.
 
-   For now I use method 1, After that your MySQL container start Attach to simple-app-network and automatically Run init.sql also Create database + table
+Now I use method 1, After that your MySQL container start Attach to simple-app-network and automatically Run init.sql also Create database + table
 
 4. Then run your node container with network:
    you cannot create another container with the same name, even if the existing container is Exited. If then remove ```bash
@@ -66,8 +66,33 @@ docker exec -i db mysql -u root -p sampledb < init.sql
 docker run -d --name simple-node --network simple-app-network -p 3000:3000 simple-node-app
 ```
     
-5. 
+5. So here we have three images where
+      node -> we don't run this image directly. It is only used to build your app image. (runtime environment)
+      simple-node-app -> Our Backend Application
+      mysql:8 -> This image runs the MySQL database server. Your Node backend connects to it using: db (database server)
+      Make sure you enable your port 22, 443, 80 and 3000
 
+6. To check data:
+```bash
+docker exec -it db mysql -u root -p
+# eneter passoword root and then 
+SHOW DATABASES;
+USE sampledb;
+SHOW TABLES;
+SELECT * FROM nodeuser;
+DESCRIBE nodeuser;
+```
+
+7. Now we will add volumn for data persistance. Create volumen then remove db and attach or run with volumn and you also need to restart your application container
+```bash
+docker volume create mysql-data
+docker rm -f db
+docker run -d --name db --network simple-app-network -e MYSQL_ROOT_PASSWORD=root -v mysql-data:/var/lib/mysql -v $(pwd)/init.sql:/docker-entrypoint-initdb.d/init.sql mysql:8
+
+# Now you get error because when you connect with new database you application attach with old
+docker restart simple-node
+# Now works fine
+```
 
 
 
