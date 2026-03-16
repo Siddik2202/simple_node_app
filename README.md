@@ -23,6 +23,7 @@ docker build -t simple-node-app .
 ```bash
 docker network create simple-app-network
 ```
+   
    3.2) Using init.sql (Your Current Method) If you have 
 ```bash
    docker run -d --name db --network simple-app-network -e MYSQL_ROOT_PASSWORD=root -v $(pwd)/init.sql:/docker-entrypoint-initdb.d/init.sql -p 3306:3306 mysql:8
