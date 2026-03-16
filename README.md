@@ -11,7 +11,11 @@ i) Host a instance then clone you repository from your github using
 ```bash
 sudo git clone https://github.com/Siddik2202/simple_node_app.git
 ```
-ii) Create Dockerfile for your project. You get this from root folder. 
+
+ii) Create Dockerfile for your project. You get this from root folder. And run 
+```bash
+docker build -t simple-node-app .
+```
 
 iii) update your nodeServer/index.js to Docker, MySQL runs in another container, accessible via a container name like db. especially important when running in Docker
 
