@@ -137,12 +137,80 @@ viii) docker exec -it < container id > mysql -u your_set_password -p and give pa
 ix) For that you should enable 3000 (from app) and 8080 (alternative port of http 80 for docker container) port .
 
  
-### For CICD Approach
+### Full Stack Node app deploy with CICD Approach with help of docker compose
 
-1. 1st of all set up agent node from master beacuse jenkins work as a master-slave architechture.
+#### 1. 1st of all set up agent node from master beacuse jenkins work as a master-slave architechture.
 
-2. Then I have a besic_jenkins or jenkins (both are correct) file set this in grovvy syntax enable github pooling and you can also attach github webhooks.
+#### 2. Create a pipeline project select option of 'github project' and enter url. Also select 'GitHub hook trigger for GITScm polling'
 
-3. And This will work smoothly also enable port.
+#### 3. Go to you repository -> setting -> add webhooks.
 
-   THSNK YOU SO MUCH !
+#### 4. Make sure you enable port(3000) according to your peoject, install docker, docker compose and enable ubuntu as a username because you you agent username is ubuntu
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y docker.io docker-compose
+sudo usermod -aG docker ubuntu
+
+# If required to restart
+java -jar remoting.jar
+pkill -f remoting.jar
+java -jar remoting.jar -workDir /home/ubuntu
+# To verify use docker ps
+```
+
+#### 5. For better view you can install avilable plugins like pipeline:stageview, GitHub Plugin from jenkins and restart.
+
+#### 6. Now add pipeline groovy syntax and then save and contitune again select label name according to your agent label name.
+```bash
+pipeline {
+    agent { label 'agent' } // Jenkins agent/slave label
+    
+    environment {
+        IMAGE_NAME = "simple_node_app"
+        IMAGE_TAG = "latest"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Siddik2202/simple_node_app.git'
+            }
+        }
+        stage('Build App Image') {
+            steps {
+                script {
+                    // Build the Docker image from local Dockerfile
+                    sh "docker build -t $IMAGE_NAME:$IMAGE_TAG ."
+                }
+            }
+        }
+
+        stage('Deploy with Docker Compose') {
+            steps {
+                script {
+                    // Stop old containers if running
+                    sh 'docker-compose down || true'
+                    // Start containers in detached mode
+                    sh 'docker-compose up -d --build'
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo '✅ Deployment successful!'
+        }
+        failure {
+            echo '❌ Deployment failed!'
+        }
+    }
+}
+```
+
+#### 7. Now If you want to see you backend data on ec2 then 
+```bash
+docker exec -it mysql_container_name<pipelineproject_db_1> mysql -u root -p # you can check through docker ps
+# Then enter password and use mysql command to view
+# Docker Compose automatically creates container names like: <folder_name>_<service_name>_<number>
+```
+
+THANK YOU SO MUCH !
