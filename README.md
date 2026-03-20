@@ -112,23 +112,28 @@ Thank you
 
 ### Here we will deploy our EC2 instance with docker compose
 
+i) It's better to use docker-compose other you need to run seperately db and app after you create docker images. 
 
+v) So 1st Install dependency's and update configuration 
 
-
-
-
-
-
-
-
-
-iii) update your nodeServer/index.js to Docker, MySQL runs in another container, accessible via a container name like db. especially important when running in Docker
-
-iv) It's better to use docker-compose other you need to run seperately db and app after create docker images. 
-
-v) Then create docker-compose.yml file, here we pass environment two times because db environment work for itself. and app environment works for pass the value with app.
-
-vi) Run this command docker-compose up -d --build It will build and run container. All the method and steps (network, volume, db & app) are written here.
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y docker.io docker-compose   # for installing both 
+sudo systemctl enable --now docker
+sudo systemctl start docker
+sudo usermod -aG docker $USER && newgrp docker 
+docker --version
+```
+Set up your project using git and redirect
+```bash
+git clone https://github.com/Siddik2202/simple_node_app.git
+cd <project> 
+```
+   
+vi) Run this command it will build and run container. All the method and steps (network, volume, db & app) are written here.
+```bash
+docker-compose up -d --build 
+```
 
 vii) Here we use healthcheck for avoing error Econnrefused Error, means app run befor db or mysql ready.
 
