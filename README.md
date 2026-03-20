@@ -114,7 +114,7 @@ Thank you
 
 i) It's better to use docker-compose other you need to run seperately db and app after you create docker images. 
 
-v) So 1st Install dependency's and update configuration 
+ii) So 1st Install dependency's and update configuration 
 
 ```bash
 sudo apt update && sudo apt upgrade -y
@@ -124,23 +124,28 @@ sudo systemctl start docker
 sudo usermod -aG docker $USER && newgrp docker 
 docker --version
 ```
-Set up your project using git and redirect
+iii) Set up your project using git and redirect
 ```bash
 git clone https://github.com/Siddik2202/simple_node_app.git
 cd <project> 
 ```
    
-vi) Run this command it will build and run container. All the method and steps (network, volume, db & app) are written here.
+iv) Run this command it will build and run container. All the method and steps (network, volume, db & app) are written here.
 ```bash
 docker-compose up -d --build 
 ```
+v) you should enable your project port and mysql port. For that you should enable 3000 (from app) and 8080 (alternative port of http 80 for docker container) port .
 
-vii) Here we use healthcheck for avoing error Econnrefused Error, means app run befor db or mysql ready.
+vi) Here we use healthcheck for avoing error Econnrefused Error, means app run befor db or mysql ready.
 
-viii) docker exec -it < container id > mysql -u your_set_password -p and give password . show databases; SELECT * FROM your_table; You can see your data.
+vii) If You can see your data d
+```bash
+docker exec -it 1a2096dc32ec <mysql container id> mysql -u siddik -p then enter password
+SHOW DATABASES; USE sampledb; SHOW TABLES; SELECT * FROM your_table;  #You can see your data.
+```
 
-ix) For that you should enable 3000 (from app) and 8080 (alternative port of http 80 for docker container) port .
-
+THANK YOU
+ 
  
 ### Full Stack Node app deploy with CICD Approach with help of docker compose
 
