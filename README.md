@@ -110,7 +110,7 @@ cd /var/lib/docker/volumes/mysql-data/_data
 Thank you
 
 
-### Here are the step to run on docker with EC2 instance with docker compose
+### Here we will deploy our EC2 instance with docker compose
 
 
 
